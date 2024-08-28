@@ -24,7 +24,7 @@ char *code_rle(char *input_data);
 
 char *decode_rle(char *input_data);
 
-void flush_buffer(char char_buf[], size_t size);
+void flush_buffer(char cur_length, char char_buf[]);
 
 void print_sequence(char to_print, char num);
 

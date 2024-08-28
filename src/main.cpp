@@ -6,7 +6,7 @@
 
 int main()
 {
-    char my_str[] = "aaaabbbcdeggffffffff";
+    char my_str[] = "aaaabbbcdeggffffffffddefgelkk";
 
     code_rle(my_str);
 
