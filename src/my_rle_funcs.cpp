@@ -55,6 +55,18 @@ int code_rle(char *input_data)
             char_buf[abs(cur_length--)] = bef_symbol; // Запоминаем в буффер символы и их длину
         }
 
+        // Обработка переполнения байта с длиной
+        if (cur_length == 127)
+        {
+            print_sequence(cur_length, bef_symbol, &file_ptr); // Печатаем сколько надо символов
+            cur_length = 0; // Обнуляемся
+        }
+        else if (cur_length == -127)
+        {
+            flush_buffer(cur_length, char_buf, &file_ptr);
+            cur_length = 0; // Обнуляемся
+        }
+
         // printf("bc = %c, cc = %c\n", bef_symbol, cur_symbol);
         if (cur_symbol == '\0')
         {
