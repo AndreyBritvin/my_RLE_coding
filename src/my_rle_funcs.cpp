@@ -95,11 +95,6 @@ int code_rle(char *input_data)
     return 0;
 }
 
-void print_sequence(char num, char to_print, FILE **file_ptr)
-{
-    // printf("%d%c", num, to_print);
-    fprintf(*file_ptr, "%c%c", num, to_print);
-}
 
 int decode_rle()
 {
@@ -132,6 +127,7 @@ int decode_rle()
             for (char i = 0; i < cur_length; i++)
             {
                 printf("%c", cur_symbol);
+                fwrite(&cur_symbol, sizeof(char), 1, file_ptr_output);
             }
         }
         else
@@ -140,6 +136,7 @@ int decode_rle()
             {
                 fscanf(file_ptr_input, "%c", &cur_symbol);
                 printf("%c", cur_symbol);
+                fwrite(&cur_symbol, sizeof(char), 1, file_ptr_output);
             }
         }
     }
@@ -156,6 +153,14 @@ int decode_rle()
     return 0;
 }
 
+void print_sequence(char num, char to_print, FILE **file_ptr)
+{
+    // printf("%d%c", num, to_print);
+    // fprintf(*file_ptr, "%c%c", num, to_print);
+    fwrite(&num, sizeof(char), 1, *file_ptr);
+    fwrite(&to_print, sizeof(char), 1, *file_ptr);
+}
+
 void flush_buffer(char cur_length, char char_buf[], FILE **file_ptr)
 {
     if (cur_length == 0)
@@ -163,12 +168,13 @@ void flush_buffer(char cur_length, char char_buf[], FILE **file_ptr)
         return;
     }
     // printf("%d", cur_length);
-    fprintf(*file_ptr, "%c", cur_length);
-
+    // fprintf(*file_ptr, "%c", cur_length);
+    fwrite(&cur_length, sizeof(char), 1, *file_ptr);
     for (size_t i = 0; i < abs(cur_length); i++)
     {
         // printf("%c", char_buf[i]);
-        fprintf(*file_ptr, "%c", char_buf[i]);
+        // fprintf(*file_ptr, "%c", char_buf[i]);
+        fwrite(&char_buf[i], sizeof(char), 1, *file_ptr);
         char_buf[i] = 0;
     }
 }
