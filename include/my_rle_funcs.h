@@ -23,9 +23,9 @@
 
 #include "file_input.h"
 
-int code_rle(char input_data[]);
+int code_rle(char input_data[], char output_data[]);
 
-int decode_rle();
+int decode_rle(char input_data[], char output_data[]);
 
 void flush_buffer(char cur_length, char char_buf[], FILE **file_ptr);
 

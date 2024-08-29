@@ -1,24 +1,24 @@
 #include "my_rle_funcs.h"
 
-int code_rle(char *input_data)
+int code_rle(char input_data[], char output_data[])
 {
     FILE *file_ptr_inp = NULL;
-    char filename_inp[] = "to_encode.txt";
-    if (int err_num = open_file(&file_ptr_inp, filename_inp, "rb"))
+    char filemode_input[] = "rb";
+    if (int err_num = open_file(&file_ptr_inp, input_data, filemode_input))
     {
         return err_num;
     }
 
     FILE *file_ptr = NULL;
-    char filename[] = "coded_text.hex";
-    if (int err_num = open_file(&file_ptr, filename, "w+b"))
+    char filemode_output[] = "w+b";
+    if (int err_num = open_file(&file_ptr, output_data, filemode_output))
     {
         return err_num;
     }
 
-    size_t iter = 1;
+    // size_t iter = 1;
 
-    char bef_symbol = input_data[0];
+    char bef_symbol = 0;
     char cur_symbol = 0;
 
     fread((void*)&bef_symbol, sizeof(char), 1, file_ptr_inp);
@@ -82,10 +82,10 @@ int code_rle(char *input_data)
         }
 
         // printf("bc = %c, cc = %c\n", bef_symbol, cur_symbol);
-        if (cur_symbol == '\0')
-        {
-            break;
-        }
+        // if (cur_symbol == '\0')
+        // {
+            // break;
+        // }
 
         bef_symbol = cur_symbol;
     }
@@ -114,25 +114,25 @@ int code_rle(char *input_data)
 }
 
 
-int decode_rle()
+int decode_rle(char input_data[], char output_data[])
 {
     char cur_length = 1;
     char cur_symbol = 0;
 
-    char char_buf[128] = {};
+    // char char_buf[128] = {};
 
     FILE *file_ptr_input = NULL;
-    char filename_input[] = "coded_text.hex";
+    char filemode_input[] = "rb";
 
     FILE *file_ptr_output = NULL;
-    char filename_output[] = "decoded_text.text";
+    char filemode_output[] = "w+b";
 
-    if (int err_num = open_file(&file_ptr_output, filename_output, "w+b"))
+    if (int err_num = open_file(&file_ptr_output, output_data, filemode_output))
     {
         return err_num;
     }
 
-    if (int err_num = open_file(&file_ptr_input, filename_input, "rb"))
+    if (int err_num = open_file(&file_ptr_input, input_data, filemode_input))
     {
         return err_num;
     }
