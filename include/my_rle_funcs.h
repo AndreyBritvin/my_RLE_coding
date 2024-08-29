@@ -20,13 +20,15 @@
 
 #include <assert.h>
 
-char *code_rle(char *input_data);
+#include "file_input.h"
 
-char *decode_rle(char *input_data);
+int code_rle(char input_data[]);
 
-void flush_buffer(char cur_length, char char_buf[]);
+int decode_rle(char input_data[]);
 
-void print_sequence(char to_print, char num);
+void flush_buffer(char cur_length, char char_buf[], FILE **file_ptr);
+
+void print_sequence(char to_print, char num, FILE **file_ptr);
 
 
 #endif // MY_ARR_FUNCS_H__

@@ -6,8 +6,8 @@ CFLAGS = $(HEADERS_INCLUDE) -lm -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -W
 
 all: a.out # double_procedures.o square_solver.o square_unit_test.o mode_parser.o main.o
 
-a.out: build/main.o build/my_rle_funcs.o
-	@$(CC) $(CFLAGS) build/my_rle_funcs.o build/main.o
+a.out: build/main.o build/my_rle_funcs.o build/file_input.o
+	@$(CC) $(CFLAGS) build/my_rle_funcs.o build/main.o build/file_input.o
 
 
 build/main.o: src/main.cpp
@@ -15,6 +15,9 @@ build/main.o: src/main.cpp
 
 build/my_rle_funcs.o: src/my_rle_funcs.cpp
 	@$(CC) $(CFLAGS) -c src/my_rle_funcs.cpp -o build/my_rle_funcs.o
+
+build/file_input.o: src/file_input.cpp
+	@$(CC) $(CFLAGS) -c src/file_input.cpp -o build/file_input.o
 
 run:
 	./a.out
