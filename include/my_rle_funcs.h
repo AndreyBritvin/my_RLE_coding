@@ -24,7 +24,7 @@
 
 int code_rle(char input_data[]);
 
-int decode_rle(char input_data[]);
+int decode_rle();
 
 void flush_buffer(char cur_length, char char_buf[], FILE **file_ptr);
 

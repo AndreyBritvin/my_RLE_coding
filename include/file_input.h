@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <errno.h>
 
-int open_file(FILE **file_ptr, char filename[]);
+int open_file(FILE **file_ptr, char filename[], char mode[]);
 
 int close_file(FILE **file_ptr);
 

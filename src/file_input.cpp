@@ -1,8 +1,8 @@
 #include "file_input.h"
 
-int open_file(FILE **file_ptr, char filename[])
+int open_file(FILE **file_ptr, char filename[], char mode[])
 {
-    if ((*file_ptr = fopen(filename, "w+b")) == NULL)
+    if ((*file_ptr = fopen(filename, mode)) == NULL)
     {
         printf("Error in opening file %s\n", filename);
 

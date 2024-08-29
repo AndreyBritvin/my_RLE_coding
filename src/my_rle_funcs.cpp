@@ -15,7 +15,7 @@ int code_rle(char *input_data)
 
     FILE *file_ptr = NULL;
     char filename[] = "coded_text.hex";
-    if (int err_num = open_file(&file_ptr, filename))
+    if (int err_num = open_file(&file_ptr, filename, "w+b"))
     {
         return err_num;
     }
@@ -89,16 +89,10 @@ void print_sequence(char num, char to_print, FILE **file_ptr)
     fprintf(*file_ptr, "%c%c", num, to_print);
 }
 
-int decode_rle(char input_data[])
+int decode_rle()
 {
-    size_t iter = 1;
-
     char cur_length = 1;
-    char bef_symbol = input_data[0];
     char cur_symbol = 0;
-
-    bool is_repeat = input_data[0] == input_data[1];
-    bool is_first_repeat = false;
 
     char char_buf[128] = {};
 
@@ -108,14 +102,43 @@ int decode_rle(char input_data[])
     FILE *file_ptr_output = NULL;
     char filename_output[] = "decoded_text.text";
 
-    if (int err_num = open_file(&file_ptr_output, filename_output))
+    if (int err_num = open_file(&file_ptr_output, filename_output, "w+b"))
     {
         return err_num;
     }
 
-    while (fscanf(file_ptr_input, "%c%c", &cur_length, &cur_symbol) != EOF)
+    if (int err_num = open_file(&file_ptr_input, filename_input, "rb"))
     {
+        return err_num;
+    }
 
+    while (fscanf(file_ptr_input, "%c", &cur_length) != EOF)
+    {
+        if (cur_length >= 0)
+        {
+            fscanf(file_ptr_input, "%c", &cur_symbol);
+            for (char i = 0; i < cur_length; i++)
+            {
+                printf("%c", cur_symbol);
+            }
+        }
+        else
+        {
+            for (char i = 0; i < abs(cur_length); i++)
+            {
+                fscanf(file_ptr_input, "%c", &cur_symbol);
+                printf("%c", cur_symbol);
+            }
+        }
+    }
+
+    if (int err_num = close_file(&file_ptr_input))
+    {
+        return err_num;
+    }
+    if (int err_num = close_file(&file_ptr_output))
+    {
+        return err_num;
     }
 
     return 0;

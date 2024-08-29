@@ -14,7 +14,7 @@ int main()
 
     char my_str_2[] = "4a3b-3cde2g8f2d-5efgel2k";
 
-    decode_rle(my_str_2);
+    decode_rle();
 
     return EXIT_SUCCESS;
 }
