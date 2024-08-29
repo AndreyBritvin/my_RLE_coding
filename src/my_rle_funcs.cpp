@@ -2,16 +2,12 @@
 
 int code_rle(char *input_data)
 {
-    size_t iter = 1;
-
-    char cur_length = 1;
-    char bef_symbol = input_data[0];
-    char cur_symbol = 0;
-
-    bool is_repeat = input_data[0] == input_data[1];
-    bool is_first_repeat = false;
-
-    char char_buf[128] = {};
+    FILE *file_ptr_inp = NULL;
+    char filename_inp[] = "to_encode.txt";
+    if (int err_num = open_file(&file_ptr_inp, filename_inp, "rb"))
+    {
+        return err_num;
+    }
 
     FILE *file_ptr = NULL;
     char filename[] = "coded_text.hex";
@@ -20,8 +16,27 @@ int code_rle(char *input_data)
         return err_num;
     }
 
-    while ((cur_symbol = input_data[iter++]) != '\0' || bef_symbol != '\0')
+    size_t iter = 1;
+
+    char cur_length = 1;
+    char bef_symbol = input_data[0];
+    char cur_symbol = 0;
+
+    fread((void*)&bef_symbol, sizeof(char), 1, file_ptr_inp);
+    fread((void*)&cur_symbol, sizeof(char), 1, file_ptr_inp);
+
+    ungetc(cur_symbol, file_ptr_inp);
+
+    bool is_repeat = bef_symbol == cur_symbol;
+    bool is_first_repeat = false;
+
+    char char_buf[128] = {};
+
+
+    // while ((cur_symbol = input_data[iter++]) != '\0' || bef_symbol != '\0')
+    while (fread(&cur_symbol, sizeof(char), 1, file_ptr_inp))
     {
+        // printf("%c\n", cur_symbol);
         if (cur_symbol == bef_symbol && is_repeat) // Одинаково и повторяется
         {
             cur_length++; // прибавляем к длине последовательность
@@ -88,6 +103,10 @@ int code_rle(char *input_data)
     printf("\n");
 
     if (int err_num = close_file(&file_ptr))
+    {
+        return err_num;
+    }
+    if (int err_num = close_file(&file_ptr_inp))
     {
         return err_num;
     }
