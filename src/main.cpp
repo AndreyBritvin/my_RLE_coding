@@ -22,6 +22,9 @@ int main()
     code_rle("photo_ded/cat.jpg", "photo_ded/cat_jpg.hex");
     decode_rle("photo_ded/cat_jpg.hex", "photo_ded/cat_decated.jpg");
 
+    code_rle("photo_ded/Splash.bmp", "photo_ded/Splash_bmp.hex");
+    decode_rle("photo_ded/Splash_bmp.hex", "photo_ded/desplashed.bmp");
+
     return EXIT_SUCCESS;
 }
 
