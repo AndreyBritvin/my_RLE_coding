@@ -18,7 +18,6 @@ int code_rle(char *input_data)
 
     size_t iter = 1;
 
-    char cur_length = 1;
     char bef_symbol = input_data[0];
     char cur_symbol = 0;
 
@@ -28,10 +27,10 @@ int code_rle(char *input_data)
     ungetc(cur_symbol, file_ptr_inp);
 
     bool is_repeat = bef_symbol == cur_symbol;
+    char cur_length = is_repeat;
     bool is_first_repeat = false;
 
     char char_buf[128] = {};
-
 
     // while ((cur_symbol = input_data[iter++]) != '\0' || bef_symbol != '\0')
     while (fread(&cur_symbol, sizeof(char), 1, file_ptr_inp))
