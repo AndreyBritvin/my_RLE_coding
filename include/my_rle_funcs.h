@@ -31,5 +31,8 @@ void flush_buffer(char cur_length, char char_buf[], FILE **file_ptr);
 
 void print_sequence(char to_print, char num, FILE **file_ptr);
 
+bool is_active_bit(char num, unsigned char byte);
+
+void set_bit(char *byte, unsigned char bit_to_set);
 
 #endif // MY_ARR_FUNCS_H__

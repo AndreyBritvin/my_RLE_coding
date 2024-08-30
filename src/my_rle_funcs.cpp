@@ -28,6 +28,7 @@ int code_rle(char input_data[], char output_data[])
 
     bool is_repeat = bef_symbol == cur_symbol;
     char cur_length = is_repeat;
+    int16_t cur_length16 = 0;
     bool is_first_repeat = false;
 
     char char_buf[128] = {};
@@ -43,7 +44,8 @@ int code_rle(char input_data[], char output_data[])
 
         else if (cur_symbol != bef_symbol && is_repeat) // Закончился повтор
         {
-            print_sequence(cur_length, bef_symbol, &file_ptr); // Печатаем сколько надо символов
+            // print_sequence(cur_length, bef_symbol, &file_ptr); // Печатаем сколько надо символов
+            flush_buffer(cur_length, &bef_symbol, &file_ptr);
             is_repeat = false; // Обнуляемся
             cur_length = 0;
             is_first_repeat = true;
@@ -72,7 +74,8 @@ int code_rle(char input_data[], char output_data[])
         // Обработка переполнения байта с длиной
         if (cur_length == 127)
         {
-            print_sequence(cur_length, bef_symbol, &file_ptr); // Печатаем сколько надо символов
+            // print_sequence(cur_length, bef_symbol, &file_ptr); // Печатаем сколько надо символов
+            flush_buffer(cur_length, &bef_symbol, &file_ptr);
             cur_length = 0; // Обнуляемся
         }
         else if (cur_length == -127)
@@ -92,7 +95,8 @@ int code_rle(char input_data[], char output_data[])
 
     if (is_repeat)
     {
-        print_sequence(cur_length, bef_symbol, &file_ptr);
+        // print_sequence(cur_length, bef_symbol, &file_ptr);
+        flush_buffer(cur_length, &bef_symbol, &file_ptr);
     }
     else
     {
@@ -159,6 +163,8 @@ int decode_rle(char input_data[], char output_data[])
         }
     }
 
+    printf("\n");
+
     if (int err_num = close_file(&file_ptr_input))
     {
         return err_num;
@@ -185,14 +191,28 @@ void flush_buffer(char cur_length, char char_buf[], FILE **file_ptr)
     {
         return;
     }
+
     // printf("%d", cur_length);
     // fprintf(*file_ptr, "%c", cur_length);
+
     fwrite(&cur_length, sizeof(char), 1, *file_ptr);
-    for (size_t i = 0; i < abs(cur_length); i++)
+    fwrite(&char_buf[0], sizeof(char), 1, *file_ptr);
+
+    for (short i = 1; i < -cur_length; i++)
     {
         // printf("%c", char_buf[i]);
         // fprintf(*file_ptr, "%c", char_buf[i]);
         fwrite(&char_buf[i], sizeof(char), 1, *file_ptr);
         char_buf[i] = 0;
     }
+}
+
+bool is_active_bit(char num, unsigned char byte)
+{
+    return (num & byte) == byte;
+}
+
+void set_bit(char *byte, unsigned char bit_to_set)
+{
+    *byte |= bit_to_set;
 }
